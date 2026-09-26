@@ -1,0 +1,31 @@
+# Local analysis dependencies and reference material are not release assets.
+.tools/
+ReferenceOnly/
+docs/research/evidence/
+Library/
+Temp/
+Obj/
+Logs/
+UserSettings/
+Builds/
+*.user
+*.csproj
+!tools/AuditVerifier/AuditVerifier.csproj
+**/bin/
+**/obj/
+__pycache__/
+*.pyc
+.mcp.json
+*.sln
+*.suo
+*.tmp
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Raw research stays local; commit only explicitly reviewed aggregate evidence.
+docs/research/evidence/
+docs/research/results/

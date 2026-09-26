@@ -1,0 +1,13 @@
+{
+  "run_id": "20260926T060424Z",
+  "tool_version": "0.1.11",
+  "executable_sha256": "66ab853c5b7b73b82a7c22a0478f5ba5b1066ed27028ef96449f5fe36a6101c5",
+  "source_unchanged": true,
+  "cases": 832,
+  "bike_name_cases": 256,
+  "result_cases": 576,
+  "matches": 832,
+  "failures": [],
+  "passed": true,
+  "scope": "Two bounded native routines. Result-screen entry precondition is assumed; finish/DNF/reentry/persistence and full gameplay remain unverified."
+}
