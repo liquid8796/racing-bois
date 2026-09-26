@@ -1,6 +1,6 @@
 # Racing Bois — kế hoạch từng phase
 
-**Ngu?n hi?n h?nh:** [Phase0 checkpoint](research/PHASE0_CHECKPOINT.md). Phase0B c?n m?; kh?ng c? SPK. S? li?u v? gi?i h?n ph?i theo checkpoint, kh?ng theo b?n t?ng k?t c?.
+**Nguồn hiện hành:** [Phase0 checkpoint](research/PHASE0_CHECKPOINT.md), [kiểm chứng progression 0.1.21](research/PROGRESSION_VALIDATION.md) và [coverage](research/COVERAGE_MATRIX.md). Phase 0A đạt phạm vi kiểm kê/cấu trúc; Phase 0B còn mở. Không có corpus SPK.
 
 Version 1, ngày 2026-09-26. Đây là kế hoạch production có điều kiện nghiệm thu, không phải báo cáo các phase đã hoàn tất. Yêu cầu gốc: [PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md). Bằng chứng: [RE report](research/REVERSE_ENGINEERING_REPORT.md) và [coverage](research/COVERAGE_MATRIX.md).
 
@@ -18,8 +18,8 @@ Chưa ấn định lịch theo tuần/ngày khi chưa có throughput art, benchm
 
 | Phase | Mục tiêu | Trạng thái hiện tại |
 |---|---|---|
-| 0A | Static audit, extractor prototypes, evidence và kế hoạch | Đã thực hiện vòng đầu; chưa phải full RE |
-| 0B | Deep RE có kiểm chứng, golden scenarios và canonical content baseline | **Bước tiếp theo** |
+| 0A | Static audit, extractor, evidence và kế hoạch | Đạt phạm vi kiểm kê/cấu trúc; 374 file nguyên trạng, không phải full RE |
+| 0B | Deep RE có kiểm chứng, golden scenarios và canonical content baseline | **Đang thực hiện**; các native subset đã đối chiếu, whole-game semantics còn mở |
 | 1 | Toolchain, Unity/Blender MCP, build/test nền, OCI feasibility | Chưa nghiệm thu |
 | 2 | Generated concepts, assistant approval và art bible | Chưa sản xuất |
 | 3 | Core handling/combat/race simulation | Chưa triển khai |
@@ -33,21 +33,21 @@ Chưa ấn định lịch theo tuần/ngày khi chưa có throughput art, benchm
 
 ## Phase 0A — static audit và khởi tạo hồ sơ
 
-**Đã làm:** kiểm kê và hash nguồn, PE/strings/code anchors, resource extraction có bounds/round-trip, decode ảnh/audio chuẩn, parser sprite và pilot compressed resource, lấy mẫu video; lưu yêu cầu/checklist/coverage/plan.
+**Đã làm:** kiểm kê và hash nguồn, PE/strings/code anchors, resource extraction có bounds/round-trip, decode ảnh/audio chuẩn, parser sprite và 269 FAM outer payload, lấy mẫu video; lưu yêu cầu/checklist/coverage/plan.
 
 **Không tuyên bố:** 100% logic/assets, full runtime trace, video full-watch, Unity game playable, online globally tested hoặc asset production-ready.
 
-**Output:** các tài liệu hiện tại, `tools/`, `research/evidence/`, `ReferenceOnly/`. Các khoảng trống cụ thể được chuyển vào Phase 0B, đặc biệt sprite layout, FAM 269-versus-7 mapping, SGS schema, SPK và gameplay runtime.
+**Output:** các tài liệu hiện tại, `tools/`, `research/evidence/`, `ReferenceOnly/`. Các khoảng trống cụ thể được chuyển vào Phase 0B, đặc biệt palette/transparency, semantics của 2.515 FAM leaves, geometry/units của course, native gameplay và caller lifecycle. Mâu thuẫn FAM pilot cũ đã được thay bằng full outer-payload manifest; không còn task SPK không tồn tại.
 
 ## Phase 0B — hoàn thiện deep reverse-engineering và đặc tả
 
 **Đầu vào:** corpus đã khóa hash, report và coverage matrix. Không sửa nguồn gốc; tạo bản sao nghiên cứu riêng khi cần chạy game.
 
-**Công việc:** hòa giải mọi parser/manifest với cùng run ID; decode nested resources và SPK; sửa sprite layout/palette và SGS/NOD schema bằng code + visual/runtime evidence. Map 15 bike profiles, các course/event/variants, traffic, rider, animation, UI/audio vào semantic catalog. Khóa edition của video/mod/canonical distribution và ghi các khác biệt.
+**Công việc:** hòa giải mọi parser/manifest với cùng run ID; định danh semantic nested resources; xác minh sprite layout/palette, geometry/units/placement của SGS/NOD bằng code + visual/runtime evidence. Map 15 bike profiles, các course/event/variants, traffic, rider, animation, UI/audio vào semantic catalog. Khóa edition của video/mod/canonical distribution và ghi các khác biệt.
 
 Chạy thí nghiệm controlled cho acceleration/braking/turning/off-road, collisions, punch/kick/weapons/block, crash/recovery, AI/traffic/police, finish/progression/economy/save. Lập event log toàn video thay vì dùng 39 sample như bằng chứng đầy đủ. Annotate disassembly và callsites; số liệu lấy từ help text được gắn nhãn riêng cho tới khi runtime xác nhận.
 
-**Deliverables:** `GameBehaviorSpec` có state machines/formulas/units/parameters và confidence; `ReferenceEventLog`; semantic asset catalog; parser tests trên toàn corpus; golden scenarios với input/setup/raw trace. Tên file deliverable này là mục tiêu tương lai, chưa có nghĩa chúng đã tồn tại.
+**Deliverables:** `GameBehaviorSpec` có state machines/formulas/units/parameters và confidence; phần [PROGRESSION_SPEC](research/PROGRESSION_SPEC.md) đã có bounded-native evidence nhưng chưa thay full behavior spec; `ReferenceEventLog`; semantic asset catalog; parser tests trên toàn corpus; golden scenarios với input/setup/raw trace. Tên file deliverable này là mục tiêu tương lai, chưa có nghĩa chúng đã tồn tại.
 
 **Exit:** không còn assumption quan trọng chưa ghi nhận; schema trọng yếu qua bounds/round-trip/visual tests; mỗi core mechanic có scenario tái lập và tiêu chí so sánh. Chưa đóng formula/schema quan trọng thì chưa được nói “giống y chang” hoặc full RE. Vấn đề provenance/canonical completeness phải có quyết định rõ trước bulk content, không âm thầm hạ baseline xuống những file dễ decode.
 
@@ -127,7 +127,7 @@ Threat model, account recovery, admin/moderation access, rate limiting, secret h
 
 **Công việc:** mở rộng route families, event variants, 15 bike profiles và các model/roster/traffic/props/landmarks/weapons/animations/UI/audio theo baseline đã khóa. Mỗi route có silhouette, nhịp đua, traffic/terrain và set dressing khác có chủ đích. Không chỉ đổi màu/copy một đường để đạt số lượng.
 
-Mọi batch đi qua concept -> Blender/UI production -> import -> prefab -> QA. Dùng modular kit/material sharing/LOD/streaming dựa trên scene budgets. Hoàn thiện SFX engine/tire/wind/weapon, music và dialogue khi provenance rõ; `.SPK` chưa decode không có nghĩa content đó được phép bỏ.
+Mọi batch đi qua concept -> Blender/UI production -> import -> prefab -> QA. Dùng modular kit/material sharing/LOD/streaming dựa trên scene budgets. Hoàn thiện SFX engine/tire/wind/weapon, music và dialogue khi provenance rõ; các opaque resource leaves chưa định danh không có nghĩa nội dung đó được phép bỏ.
 
 **Deliverables:** semantic coverage dashboard, release-eligible asset catalog, source `.blend`, export/import settings, complete routes/events và asset QA evidence.
 
@@ -175,4 +175,4 @@ Closed beta với người chơi từ nhiều mạng/khu vực, sau đó tăng t
 
 Min-spec hardware; số người chơi release cuối (8 là mục tiêu đầu, 16 có điều kiện); network package/editor exact version; VM OCI shape/region/capacity và chi phí; canonical original asset roster; nội dung cần quyền/licensing; RPO/RTO cuối; giới hạn RTT cho chế độ cạnh tranh. Mỗi quyết định có chủ sở hữu và phase khóa tương ứng trong tài liệu kiến trúc/coverage, không mặc định giải quyết bằng một lựa chọn ngẫu nhiên.
 
-**Hành động kế tiếp:** thực hiện Phase 0B theo danh sách thí nghiệm trong RE report, bắt đầu bằng hòa giải parser manifests và khóa golden scenarios handling/combat. Không bắt đầu bulk 3D/UI, deploy production hoặc tuyên bố full RE từ kết quả static audit hiện có.
+**Hành động kế tiếp:** thực hiện Phase 0B theo danh sách thí nghiệm trong RE report, ưu tiên chứng minh simulation tiến triển, controlled input và golden scenarios handling/combat; nối các native progression subset với caller/runtime thật. Không bắt đầu bulk 3D/UI, deploy production hoặc tuyên bố full RE từ kết quả static audit hiện có.

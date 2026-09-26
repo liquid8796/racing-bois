@@ -32,7 +32,7 @@ with -process RacingBois.exe -noanalysis instead of re-importing over it.
 | 0x42F000 / 0x42F110 | Save serialization / loading | Envelope/copy layout reviewed; not all profile fields named |
 | 0x416310 | Choose high/low horizons, meter, bike dashboard | Rendering/input-state dependent |
 | 0x44C5D0 | Meter loader supplies nominal 190 by 64 | Low-resolution scaling is in helper 0x44C5F0 |
-| 0x420AA0 | Bike index to localized name ID | Native mapping needs corpus oracle |
+| 0x420AA0 | Bike index to localized name ID | 256/256 byte-valued index cases verified; invalid IDs do not imply valid profiles |
 
 Version 0.1.11 adds an independent pure mapping and bounded oracle for every
 byte-valued bike index. It also adds a model/oracle for the full result-screen
@@ -105,3 +105,9 @@ not proof that the unmodified distribution launches on this machine.
 The process remains suspended unless hook initialization succeeds. Captures are
 restricted to that PID's foreground window. It sends no gameplay input, changes
 no physics constants, and terminates only its recorded spawned PID at timeout.
+
+## Progression boundaries — tool 0.1.21
+
+See [PROGRESSION_SPEC](PROGRESSION_SPEC.md) and [validation receipt](PROGRESSION_VALIDATION.md). Four boundaries are independently compared to pure models: finish-request prefix at 0x416010, offline outcome tail at 0x416237, qualification/media prefix at 0x449150, and acknowledgement callback at 0x41F6D0. The last callback was found through assembly and table pointers, not a separate initial Ghidra function export. This is why automatic function counts are not semantic coverage.
+
+Execution stops before notification, playback and network callbacks. The offline-tail stack and incoming registers are synthetic fixtures. Signed rank bytes, exact mask equality, invalid qualifying course IDs, duplicate requests and the fifth-level boundary are explicit tests; they do not establish complete race execution or safe production-server rules.

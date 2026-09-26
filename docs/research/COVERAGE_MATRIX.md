@@ -1,47 +1,50 @@
 # Racing Bois — coverage matrix
 
-> Xem [checkpoint hiện hành](PHASE0_CHECKPOINT.md). Số liệu ban đầu đã được đính chính; native comparisons không đồng nghĩa toàn bộ gameplay đã recovered. Phase0B vẫn mở.
+Cập nhật phần cấu trúc và progression ngày 2026-09-26, tool 0.1.21. Bằng chứng tổng hợp: [Progression validation](PROGRESSION_VALIDATION.md); runtime có checkpoint riêng tại [PHASE0_CHECKPOINT.md](PHASE0_CHECKPOINT.md). Không có tuyên bố “100% logic recovered”.
 
-Ngày: 2026-09-26. Không có chỉ số “100% logic recovered”. Mỗi dòng chỉ hoàn tất khi đạt đúng loại kiểm chứng cần thiết.
+## Coverage hiện hành
 
-| Domain | Trạng thái hiện tại | Bằng chứng | Khoảng trống / gate đóng |
+| Domain | Trạng thái | Bằng chứng cục bộ / đặc tả | Khoảng trống còn phải đóng |
 |---|---|---|---|
-| Corpus và SHA-256 | VERIFIED-STRUCTURE | `evidence/inventory.json`, `evidence/FINAL_AUDIT_SNAPSHOT.json` | Giữ nguyên nguồn; thêm canonical baseline riêng khi có, không gọi mod là bản gốc đầy đủ |
-| PE headers/imports/strings | VERIFIED-STRUCTURE | `evidence/pe_analysis.json`, `evidence/localization/` | Map call graph và ý nghĩa nhánh runtime; không coi linear disassembly là decompilation hoàn chỉnh |
-| 13 resource containers / 429 entries | VERIFIED-STRUCTURE | `evidence/resource_tables.json` | Map nested schema, semantic IDs; kiểm tra lại inventory cùng run ID |
-| RRI/BMP | Decode ảnh chuẩn đã chạy | `evidence/image_catalog.json` | Semantic uniqueness, chất lượng ảnh, nội dung thiếu và release provenance |
-| RRA/WAV | RIFF/WAVE đã đọc | `evidence/audio_catalog.json` | Đối chiếu event sử dụng, loop/loudness và phần audio trong định dạng khác |
-| SPK và audio corpus đầy đủ | UNVERIFIED | `evidence/inventory.json` | Schema/decompress/decode, đếm clip độc lập, kiểm tra nghe và event mapping |
-| DAT sprite | Cấu trúc/pixel round-trip có kiểm tra; hình render chưa đạt | `evidence/sprite_catalog.json`, `evidence/sprite_layout_probe.jpg` | Layout/stride/orientation/palette/transparency phải khớp frame runtime; giữ slot rỗng |
-| BOB | HYPOTHESIS preview | `evidence/bob_candidates.json` | Kích thước theo code, palette, transparency và so ảnh game; không tự approve |
-| FAM | Pilot decoder; coverage chưa hòa giải | `evidence/family_decode.json`, `evidence/resource_tables.json` | 7 pilot entries chưa map đủ 269 FAM inventory; decode toàn corpus và inner schema |
-| SPEC / 15 profile xe | Raw fields + code anchors một phần | `evidence/resource_tables.json`, `evidence/RacingBois.text.asm` | Units, fixed-point/rounding, curve mapping, acceleration/brake/turn runtime |
-| Course SGS/NOD | HYPOTHESIS chưa pass bounds toàn bộ | `evidence/course_section_tables.json` | Bác bỏ/sửa schema candidate; topology/elevation/length/spawn phải được kiểm tra |
-| CAR/ANIM/CEL/GLOB/BKR | Extracted bytes, semantic partial/unknown | `evidence/resource_tables.json`, `evidence/inventory.json` | Quan hệ ID, sprite/frame timing, collision/AI/scene placements |
-| Save/profile | Dump mẫu, chưa hoàn thiện schema | `evidence/save_samples.json` | Field offsets, ranges, checksums, controlled diff và round-trip an toàn |
-| Reference video | 39 frame trích xuất / metadata | `evidence/video/video_samples.json` | Event annotation toàn video và review các clip hành động; không coi sample là full watch |
-| Handling/collision/crash | UNVERIFIED-BEHAVIOR | Code navigation + reference corpus | Golden scenarios có input/trace, repeated measurements, spec units/state machines |
-| Combat/weapon/damage | UNVERIFIED-BEHAVIOR | Chuỗi/code anchors chưa đủ | Active frames, range, left/right, block/counter, stacking/cooldown và damage formula |
-| AI/traffic/police | UNVERIFIED-BEHAVIOR | Dữ liệu/strings tham chiếu | Quyết định theo state/perception, difficulty, determinism cần có/không cần |
-| Career/economy/progression | UNVERIFIED-BEHAVIOR | Resource/help/save chưa phải runtime proof | Qualify/unlock/results/prices/repair/penalties; phân biệt bản mod và reference video |
-| Original asset completeness | UNVERIFIED | Chỉ có distribution mod hiện được cung cấp | Đối chiếu canonical asset roster trước tuyên bố >= toàn bộ game gốc |
-| Unity/Blender production integration | Chưa xác nhận sẵn sàng ở lượt thăm dò | Tool probes trong phiên | Handshake đúng project/scene, không sửa nhầm instance; client/server smoke builds |
-| Multiplayer/OCI readiness | Chưa triển khai/kiểm thử | Kiến trúc đề xuất | Kiểm tra VM, binary architecture, ports, authority, LAN offline, nhiều mạng thật |
-| Production asset quality/performance | Chưa bắt đầu nghiệm thu | `../PROJECT_REQUIREMENTS.md` | Concept APPROVED + checklist + gameplay visual QA + profiler evidence |
+| Corpus / SHA-256 | VERIFIED-STRUCTURE | evidence/corpus-0.1.21/summary.json: 374 file, 503.081.481 byte, 365 hash; nguyên trạng | Corpus mod không tự chứng minh đầy đủ canonical original |
+| PE / native navigation | VERIFIED-STRUCTURE | PE headers, imports, 1.585 Ghidra exports; NATIVE_NAVIGATION.md | Inferred types/callback boundaries và semantics toàn game chưa đầy đủ |
+| RSRC containers | VERIFIED-STRUCTURE | 13 containers / 429 entries, bounds và byte extraction | Nested payload không đồng nghĩa đã định danh asset |
+| RRI / BMP | VERIFIED-STRUCTURE | 119 JPEG và 1 BMP được decode | Semantic uniqueness, usage và provenance phát hành |
+| RRA / WAV | VERIFIED-STRUCTURE | 87 RIFF/WAVE | Loop/loudness, nghe kiểm tra, mapping sự kiện |
+| MIDS / sfbk | VERIFIED-STRUCTURE | 11 MIDS, 6 soundfont banks; parser regressions | Music/instrument/event mapping; không có corpus SPK |
+| AVI | VERIFIED-STRUCTURE | 61 file probe và decode frame đầu | Không phải full-duration decode hoặc xem hết nội dung |
+| DAT sprite | VERIFIED-STRUCTURE / VERIFIED-NATIVE-SUBSET | 7 banks, 1.439 slots / 869 nonempty, exact EOF, native walker | Palette/transparency/orientation và semantic animation mapping |
+| BOB / MIP | HYPOTHESIS-PARTIAL | 27 raw-indexed BOB, 1 MIP; rendering loader anchors | Dimensions/stride/palette/UV ý nghĩa, đối chiếu ảnh runtime |
+| FAM | VERIFIED-STRUCTURE | 269 outer payload, 106 placeholders, 2.515 opaque leaves | Inner semantics; leaf hoặc placeholder không được đếm là production asset |
+| SGS / NOD courses | VERIFIED-STRUCTURE | 5 course, 109 sections / 859 chunks | Geometry, units, elevation, topology, spawn/placement runtime |
+| SPEC / 15 bike profiles | VERIFIED-NATIVE-SUBSET | Initializer trong 885 structural native cases | Tên/đơn vị trường, tuning và measured handling |
+| CAR / ANIM / CEL / CANS / PAL | VERIFIED-STRUCTURE-PARTIAL | Resource identities và payload bounds | Frame timing, collision, palette, mapping object/scene |
+| Save envelope / checksum | VERIFIED-STRUCTURE / VERIFIED-NATIVE-SUBSET | 14 RRS hợp lệ; 4 file zero-filled không phải saves | Profile field semantics, persistence/crash consistency |
+| Bike name / result cash prefix | VERIFIED-NATIVE-SUBSET | evidence/gameplay-0.1.21/summary.json: 832/832; GAMEPLAY_SPEC.md | Full entry conditions, purchases, repairs, penalties, grant idempotency |
+| Finish request / result screen | VERIFIED-NATIVE-SUBSET | PROGRESSION_SPEC.md: 1.354 + 1.036 cases | Finish-line detection, real elapsed-time units, full caller lifecycle |
+| Qualification / result media | VERIFIED-NATIVE-SUBSET | PROGRESSION_SPEC.md: 2.116 cases | Actual playback, invalid-course native stack semantics deliberately excluded |
+| Level acknowledgement | VERIFIED-NATIVE-SUBSET | PROGRESSION_SPEC.md: 1.760 cases + 3 synthetic call chains | Network callback, live race progression, actual save writes |
+| Handling / braking / crash / recovery | UNVERIFIED-BEHAVIOR | Native navigation and research reference | Controlled input/trace, timings, units, repeatable comparisons |
+| Combat / weapons / damage | UNVERIFIED-BEHAVIOR | Resource/code anchors | Active frames/range, left/right, block/counter, cooldown and damage |
+| AI / traffic / police | UNVERIFIED-BEHAVIOR | Course/resource/code anchors | Decisions, perception, difficulty, pursuit/arrest runtime |
+| Video reference | PARTIAL-OBSERVATION | 39 sparse frames / 4 contact sheets, earlier checkpoint | Full event annotation; a still is not a hit/recovery timing measurement |
+| Runtime navigation | SEPARATE-EXPERIMENT | PHASE0_CHECKPOINT.md and private probe reports | Rendered frame / race setup does not prove advancing simulation |
+| Unity / Blender / OCI / multiplayer | NOT-ACCEPTED | Architecture and production phase plan only | Correct-instance integration, build/runtime/network/performance evidence |
+| Production art / baseline completeness | NOT-ACCEPTED | PROJECT_REQUIREMENTS and concept gate | Canonical content roster, rights/provenance, approved concepts and prefab QA |
 
-## Định nghĩa trạng thái
+## Ý nghĩa trạng thái
 
-**VERIFIED-STRUCTURE:** parsing/bounds/hash/round-trip đã có bằng chứng tương ứng. Không tự suy ra gameplay.
+**VERIFIED-STRUCTURE:** parsing, bounds, hash, byte round-trip hoặc media decode đã có kiểm tra tương ứng. Không tự suy ra gameplay đúng hoặc release-eligible asset.
 
-**VERIFIED-BEHAVIOR:** có setup tái lập, quan sát runtime hoặc trace, kết quả đo và test tương ứng với spec. Chưa có hệ thống gameplay nào được tuyên bố hoàn tất mức này ở lượt static audit.
+**VERIFIED-NATIVE-SUBSET:** pure model khớp mã máy gốc tại các boundary và miền input ghi rõ. Những globals/stack đầu vào là fixture giả lập; network/Win32 calls bị loại khỏi thí nghiệm. Không đồng nghĩa đã chơi race thật, hiểu mọi caller hoặc đạt toàn bộ behavioral coverage.
 
-**HYPOTHESIS:** giả thuyết đang thử; dữ liệu phản ví dụ được giữ lại. Nếu bounds/visual test fail thì không dùng output như asset/schema đúng.
+**VERIFIED-BEHAVIOR** chỉ được dùng cho một claim có controlled setup/input, live observation/trace, output đo và acceptance test phù hợp. Toàn bộ handling/combat/AI chưa đạt mức này.
 
-**UNVERIFIED:** thiếu bằng chứng; phải có task đóng khoảng trống, không ghi PASS.
+**HYPOTHESIS / PARTIAL / UNVERIFIED / NOT-ACCEPTED:** còn thiếu bằng chứng hoặc gate. Không đổi nhãn thành PASS chỉ vì một parser/test khác thành công.
 
-## Hồ sơ bắt buộc cho một kết luận mới
+## Hồ sơ bắt buộc
 
-`claim_id`, source hash/run ID, file/offset hoặc timestamp, experiment ID, input biết được, output đo được, alternative explanations, confidence, acceptance test và ảnh/trace thực tế. Đối với asset thêm provenance, semantic ID, variant/duplicate group và trạng thái release.
+Mỗi claim cần source hash/run ID, file/offset hoặc timestamp, input/setup, output, alternative explanations, confidence, limitations và test. Evidence runner phải thất bại khi tool version/code thay đổi giữa run. Asset cần thêm semantic ID, provenance và duplicate/variant grouping.
 
-Coverage phải gắn với requirement trong `../PROJECT_REQUIREMENTS.md` và phase trong `../PHASE_PLAN.md`. Một blocker chưa đóng chỉ có thể được thay bằng quyết định thay đổi yêu cầu rõ ràng, không bằng việc đổi tên thành “done”.
+Không cộng số case, frame, leaf, LOD hoặc file trùng thành số asset độc lập hoặc phần trăm logic đã phục hồi. Phase 0A đạt phạm vi kiểm kê/cấu trúc; **Phase 0B vẫn mở**. Đối chiếu [requirements](../PROJECT_REQUIREMENTS.md), [architecture rules](../ARCHITECTURE_RULES.md) và [phase plan](../PHASE_PLAN.md).
 

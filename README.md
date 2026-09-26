@@ -20,7 +20,7 @@ Workspace duy nhất: `D:\Project\Unity\racing-bois-desktop`.
 6. [Pipeline concept 2D → Blender → prefab Unity](docs/ASSET_PIPELINE.md).
 7. [Kế hoạch từng phase và điều kiện chuyển phase](docs/PHASE_PLAN.md).
 
-**Bước tiếp theo: Phase 0B — hoàn thiện đặc tả gameplay bằng reverse-engineering có kiểm chứng và thực nghiệm có kiểm soát.** Không nhảy thẳng sang sản xuất hàng loạt asset, không thêm multiplayer vào cuối dự án.
+**Phase 0B đang thực hiện:** [Đặc tả finish/qualification/progression](docs/research/PROGRESSION_SPEC.md) và [kết quả kiểm chứng 0.1.21](docs/research/PROGRESSION_VALIDATION.md). Đã khớp 6.269 ca đối chiếu có giới hạn; chưa phải full gameplay. Tiếp tục controlled handling/combat và semantics assets. Không nhảy thẳng sang sản xuất hàng loạt asset, không thêm multiplayer vào cuối dự án.
 
 ## Nguồn và bằng chứng
 
@@ -28,9 +28,11 @@ Bản mod: `C:\Users\Liquid\Downloads\Unity\racing_bois_mod`.
 
 Video: `C:\Users\Liquid\Downloads\prompt\Road Rash PC (1995) - Big Game Mode (All Levels).mp4`.
 
-Snapshot hiện dùng: `docs/research/evidence/FINAL_AUDIT_SNAPSHOT.json`. Các file trong `docs/research/evidence/` và `ReferenceOnly/` là bằng chứng nghiên cứu cục bộ; không mặc định được đưa vào bản phát hành. Mọi tổng số phải gắn với snapshot, không lấy số liệu từ log cũ bị thay thế.
+Corpus kiểm chứng lại: `docs/research/evidence/corpus-0.1.21/summary.json`; progression: `docs/research/evidence/progression-0.1.21/summary.json`. Snapshot `FINAL_AUDIT_SNAPSHOT.json` là hồ sơ lịch sử, không phải nguồn mới nhất. Các file trong `docs/research/evidence/` và `ReferenceOnly/` là bằng chứng nghiên cứu cục bộ; không mặc định được đưa vào bản phát hành. Mọi tổng số phải gắn với snapshot, không lấy số liệu từ log cũ bị thay thế.
 
 Các công cụ tái lập nằm trong `tools/`; chúng đọc nguồn tham chiếu và ghi kết quả vào workspace. Không chạy các batch launcher của bản mod vì có thao tác ngoài phạm vi phân tích như tắt Explorer hoặc chỉnh registry.
 
 Quy tắc làm việc cho agent nằm trong [AGENTS.md](AGENTS.md). Thông báo thư viện nghiên cứu nằm trong [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+Source readable, dễ refactor, maintainable, testable và extensible theo [Architecture rules](docs/ARCHITECTURE_RULES.md); dùng pattern để giải quyết nhu cầu thật, không thêm abstraction chỉ vì hình thức.
 

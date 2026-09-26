@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.21 - Version-bound progression conformance evidence
+
+Finalize the 0.1.19 progression work with start/end source and tool-version
+fingerprints, reject evidence runs modified while executing, and record the
+verified behavior boundaries separately from full gameplay. The 0.1.20 runtime
+scenario work appeared concurrently and remains a separately scoped work item.
+
+## 0.1.19 - Finish qualification and progression boundary models
+
+Separate pure finish/result/progression models from independent, bounded native
+oracles. Cover repeat-request suppression, signed rank bytes, per-course masks,
+result-media selection and acknowledgement-driven level transitions. Networking
+callbacks, playback and persistence remain outside the experiments. Validation
+results are recorded in the Phase 0 checkpoint, not inferred from this entry.
+
 ## 0.1.18 - Research publication hygiene
 
 Keep raw extraction, traces and machine-specific research output local; only
